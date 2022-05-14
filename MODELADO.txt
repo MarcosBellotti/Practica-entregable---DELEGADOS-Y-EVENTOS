@@ -1,0 +1,45 @@
+Entidades
+	abstract Producto
+		Modelo	
+		Marca
+		NroDeSerie
+		Id
+		-->abstract mensajeParaListar
+	Monitor: Producto
+		AñoDeFabricacion
+		EsNuevo
+		Pulgadas (nullable)
+		-->override mensajeParaListar
+	Computadora: Producto
+		DescripcionDelProcesador
+		CantidadDeRam
+		NombreDelFabricante
+		-->override mensajeParaListar
+	Enumeradores
+		Enum 
+
+Logica (con Singleton)
+	List<Monitor> Monitores
+	List<Computadora> Computadoras
+	List<Producto> Productos
+
+	-->CargarProducto(modelo, marca, nroDeSerie, añoDeFabricacion, pulgadas)
+		-->Evento
+	-->CargarProducto(modelo, marca, nroDeSerie, descripcionDelProcesador, cantidadDeRam, nombreFabricante)
+		-->Evento
+	
+	-->EliminarProducto(id)
+		-->ValidarProducto(id)
+		-->Evento
+
+	-->PolimorfismoDeProductos
+	-->BuscarProducto(modelo, marca, nroDeSerie)
+
+	-->LanzadorEvento(mensaje)
+	
+ClaseEstatica
+	Estatica
+		-->MetodoExtension()
+	
+Consola
+	--> HandlerProductoAgregadoOEliminado
