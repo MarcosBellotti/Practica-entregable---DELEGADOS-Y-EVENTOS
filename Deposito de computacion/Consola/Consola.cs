@@ -4,7 +4,7 @@ using ClaseEstatica;
 LogicaPrincipal instanciaLogica = LogicaPrincipal.Instance;
 instanciaLogica.OperacionRealizada += HandlerProductoAgregadoOEliminado;
 
-bool continuar = true;
+bool continuarWhile = true;
 
 do
 {
@@ -71,16 +71,37 @@ do
             break;
     }
 
-    Console.WriteLine("¿Desea continuar? S/N");
-    continuar = Console.ReadLine().ToLower()=="s";
+    Console.WriteLine("¿Desea continuar operando? S/N");
+    continuarWhile = Console.ReadLine().ToLower()=="s";
 
-} while (continuar);
+} while (continuarWhile);
 
 void HandlerProductoAgregadoOEliminado(object? sender, Eventos.Evento e)
 {
     Console.Clear();
 
-    Console.WriteLine(e.Mensaje);
+    if(e.Mensaje=="")
+    {
+        foreach(string valor in e.Listado)
+        {
+            if(valor== e.Listado.Last())
+            {
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.WriteLine($"{valor}. Total de monitores: {e.CantidadDeMonitores}.\n Total de computadoras: {e.CantidadDeComputadoras}.\n Monitores: {(e.CantidadDeMonitores * 100) / e.Listado.Count}.\n Computadoras: {(e.CantidadDeComputadoras * 100) / e.Listado.Count}");
+                Console.ForegroundColor = ConsoleColor.Black;
 
-    Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine(valor);
+            }
+            
+        }
+    }
+    else
+    {
+        Console.WriteLine(e.Mensaje);
+    }
+
+    Thread.Sleep(2000);
 }

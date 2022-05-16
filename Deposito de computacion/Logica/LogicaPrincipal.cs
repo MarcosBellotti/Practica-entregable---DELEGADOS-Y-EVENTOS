@@ -16,16 +16,17 @@ namespace Logica
         List<Pantalla> Monitores = new List<Pantalla>();
         List<Computadora> Computadoras = new List<Computadora>();
         List<Producto> Productos = new List<Producto>();
+        List<string> DescripcionesDeLosProductos = new List<string>();
 
         public void AgregarProducto(string modelo, string marca, int numeroDeSerie, int añoDeFabricacion, int pulgadas) //Monitores
         {
             Monitores.Add(new Pantalla(modelo, marca, numeroDeSerie, añoDeFabricacion, pulgadas));
-            LanzadorDeEvento($"Se agregó el {Monitores.Last().MensajeParaListar()}"); 
+            LanzadorDeEvento("", ListaOrdenadaPorTipoDeProducto(""), Computadoras.Count, Monitores.Count); 
         }
         public void AgregarProducto(string modelo, string marca, int numeroDeSerie, string descripcion, string nombreDelFabricante, int cantidadDeRam) //Computadoras
         {
             Computadoras.Add(new Computadora(modelo, marca, numeroDeSerie, descripcion, nombreDelFabricante, cantidadDeRam));
-            LanzadorDeEvento($"Se agregó la {Computadoras.Last().MensajeParaListar()}");
+            LanzadorDeEvento("",ListaOrdenadaPorTipoDeProducto(""), Computadoras.Count, Monitores.Count);
         }
 
         public void EliminarProducto(string modelo, string marca, int numeroDeSerie)
@@ -34,15 +35,23 @@ namespace Logica
             if (productoBuscado != null)
             {
                 Productos.Remove(productoBuscado);
-                LanzadorDeEvento($"Se eleminó el {productoBuscado.MensajeParaListar()}");
+                if(Computadoras.Find(x=>x.Identificador == productoBuscado.Identificador) != null)
+                {
+                    Computadoras.Remove(Computadoras.Find(x => x.Identificador == productoBuscado.Identificador));
+                }
+                else
+                {
+                    Monitores.Remove(Monitores.Find(x => x.Identificador == productoBuscado.Identificador));
+                }
+                LanzadorDeEvento($"Se eleminó el {productoBuscado.MensajeParaListar()}", null, Computadoras.Count, Monitores.Count);
             }
             else
             {
-                LanzadorDeEvento("No se encontró el elemento a borrar");
+                LanzadorDeEvento("No se encontró el elemento a borrar", null, Computadoras.Count, Monitores.Count);
             }
         }
 
-        public List<string> ListaOrdenadaPorTipoDeProducto()
+        public List<string> ListaOrdenadaPorTipoDeProducto(string mensaje)
         {
             List<string> lista = new List<string>();    
             foreach(Producto producto in PolimorfismoProductos())
@@ -59,19 +68,22 @@ namespace Logica
 
         private List<Producto> PolimorfismoProductos()
         {
+            Productos.Clear();
+
             Productos.AddRange(Monitores);
             Productos.AddRange(Computadoras);
 
             return Productos;
         }
 
-        private void LanzadorDeEvento(string mensaje) //Para evitar repetir codigo
+        private void LanzadorDeEvento(string mensaje, List<string> listado, int cantidadDeComputadoras, int cantidadDeMonitores) //Para evitar repetir codigo
         {
             if (OperacionRealizada != null)
             {
-                OperacionRealizada(this, new Eventos.Evento() { Mensaje = mensaje });
+                OperacionRealizada(this, new Eventos.Evento() { Listado = listado, Mensaje=mensaje , CantidadDeComputadoras= cantidadDeComputadoras, CantidadDeMonitores=cantidadDeMonitores }) ;
             }
         }
+
 
     }
 }
