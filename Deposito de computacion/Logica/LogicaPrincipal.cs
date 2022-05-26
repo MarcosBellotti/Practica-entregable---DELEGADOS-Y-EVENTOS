@@ -13,6 +13,7 @@ namespace Logica
         public EventHandler<Eventos.Evento> OperacionRealizada;
 
         //Listas
+        //NO ES NECESARIO 3 LISTAS
         List<Pantalla> Monitores = new List<Pantalla>();
         List<Computadora> Computadoras = new List<Computadora>();
         List<Producto> Productos = new List<Producto>();
@@ -66,7 +67,7 @@ namespace Logica
             return PolimorfismoProductos().Find(x=>x.Identificador == $"{modelo}-{marca}-{numeroDeSerie.ToString()}") ;
         }
 
-        private List<Producto> PolimorfismoProductos()
+        private List<Producto> PolimorfismoProductos() //EVITAR LA PALABRA TECNICA, OBTENERPRODUCTOS ES SUFICIENTE
         {
             Productos.Clear();
 
